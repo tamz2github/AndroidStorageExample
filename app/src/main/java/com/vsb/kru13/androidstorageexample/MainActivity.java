@@ -1,10 +1,16 @@
 package com.vsb.kru13.androidstorageexample;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +25,9 @@ public class MainActivity extends Activity {
 
         saveToSharedPreferences();
         loadFromSharedPreferences();
+
+        saveToInternalStorageFile();
+        readFromInternalStorageFile();
 
     }
 
@@ -45,6 +54,38 @@ public class MainActivity extends Activity {
         Log.d("MainActivity", "SharedPreferences boolValue = " + sharedPreferences.getBoolean("boolValue", true));
         Log.d("MainActivity", "SharedPreferences longNumber = " + sharedPreferences.getLong("longNumber", 0));
 
+    }
+
+    private void saveToInternalStorageFile() {
+        String filename = "soubor.txt";
+        String fileContents = "Hello world!";
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(fileContents.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readFromInternalStorageFile() {
+        String filename = "soubor.txt";
+        FileInputStream inputStream;
+
+        try {
+            inputStream = openFileInput(filename);
+
+
+            InputStreamReader isr = new InputStreamReader(inputStream);
+            BufferedReader br = new BufferedReader(isr);
+            Log.d("MainActivity", "File line = " + br.readLine());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
